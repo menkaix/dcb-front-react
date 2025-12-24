@@ -6,7 +6,6 @@ import {
   Table,
   Modal,
   Form,
-  Input,
   InputNumber,
   Select,
   message,
@@ -21,10 +20,10 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { niveauxApi } from '@/api/endpoints/niveaux'
 import { queryKeys } from '@/api/query-keys'
-import { TypeMur, MateriauMur, OrientationMur } from '@/api/types/batiment.types'
+import { TypeMur, OrientationMur } from '@/api/types/batiment.types'
 import type { Mur } from '@/api/types/batiment.types'
 import type { ColumnsType } from 'antd/es/table'
-import { TYPE_MUR_LABELS, MATERIAU_MUR_LABELS, ORIENTATION_MUR_LABELS } from '../constants/labels'
+import { TYPE_MUR_LABELS, ORIENTATION_MUR_LABELS } from '../constants/labels'
 
 interface MursManagerProps {
   batimentId: string
@@ -33,16 +32,16 @@ interface MursManagerProps {
 }
 
 interface MurFormData {
-  nom?: string
   longueur: number
   hauteur: number
   epaisseur: number
   type: TypeMur
-  materiau?: MateriauMur
   orientation?: OrientationMur
 }
 
-export default function MursManager({ batimentId, niveauId, murs = [] }: MursManagerProps) {
+export default function MursManager({ batimentId, niveauId, murs }: MursManagerProps) {
+  // Gérer le cas où murs est null ou undefined
+  const mursList = murs ?? []
   const queryClient = useQueryClient()
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = Form.useForm<MurFormData>()
@@ -98,12 +97,10 @@ export default function MursManager({ batimentId, niveauId, murs = [] }: MursMan
   const handleEdit = (mur: Mur) => {
     setEditingMur(mur)
     form.setFieldsValue({
-      nom: mur.nom,
       longueur: mur.longueur,
       hauteur: mur.hauteur,
       epaisseur: mur.epaisseur,
       type: mur.type,
-      materiau: mur.materiau,
       orientation: mur.orientation,
     })
     setIsModalOpen(true)
@@ -138,24 +135,11 @@ export default function MursManager({ batimentId, niveauId, murs = [] }: MursMan
 
   const columns: ColumnsType<Mur> = [
     {
-      title: 'Nom',
-      dataIndex: 'nom',
-      key: 'nom',
-      width: 150,
-    },
-    {
       title: 'Type',
       dataIndex: 'type',
       key: 'type',
       render: (type: TypeMur) => TYPE_MUR_LABELS[type],
       width: 120,
-    },
-    {
-      title: 'Matériau',
-      dataIndex: 'materiau',
-      key: 'materiau',
-      render: (materiau?: MateriauMur) => materiau ? MATERIAU_MUR_LABELS[materiau] : '-',
-      width: 140,
     },
     {
       title: 'Dimensions (L×H×E)',
@@ -214,17 +198,17 @@ export default function MursManager({ batimentId, niveauId, murs = [] }: MursMan
       {contextHolder}
       <Card
         size="small"
-        title={`Murs (${murs.length})`}
+        title={`Murs (${mursList.length})`}
         extra={
           <Button type="primary" size="small" icon={<PlusOutlined />} onClick={handleAdd}>
             Ajouter
           </Button>
         }
       >
-        {murs.length > 0 ? (
+        {mursList.length > 0 ? (
           <Table
             columns={columns}
-            dataSource={murs}
+            dataSource={mursList}
             rowKey="id"
             pagination={false}
             size="small"
@@ -247,43 +231,18 @@ export default function MursManager({ batimentId, niveauId, murs = [] }: MursMan
       >
         <Form form={form} layout="vertical" style={{ marginTop: '24px' }}>
           <Form.Item
-            label="Nom"
-            name="nom"
+            label="Type"
+            name="type"
+            rules={[{ required: true, message: 'Veuillez sélectionner le type' }]}
           >
-            <Input placeholder="Ex: Mur façade sud" />
+            <Select
+              placeholder="Sélectionner"
+              options={Object.entries(TYPE_MUR_LABELS).map(([value, label]) => ({
+                value,
+                label,
+              }))}
+            />
           </Form.Item>
-
-          <Space style={{ width: '100%' }} size="middle">
-            <Form.Item
-              label="Type"
-              name="type"
-              rules={[{ required: true, message: 'Veuillez sélectionner le type' }]}
-              style={{ flex: 1, minWidth: 200 }}
-            >
-              <Select
-                placeholder="Sélectionner"
-                options={Object.entries(TYPE_MUR_LABELS).map(([value, label]) => ({
-                  value,
-                  label,
-                }))}
-              />
-            </Form.Item>
-
-            <Form.Item
-              label="Matériau"
-              name="materiau"
-              style={{ flex: 1, minWidth: 200 }}
-            >
-              <Select
-                placeholder="Sélectionner (optionnel)"
-                allowClear
-                options={Object.entries(MATERIAU_MUR_LABELS).map(([value, label]) => ({
-                  value,
-                  label,
-                }))}
-              />
-            </Form.Item>
-          </Space>
 
           <Space style={{ width: '100%' }} size="middle">
             <Form.Item

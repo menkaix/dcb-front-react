@@ -43,10 +43,14 @@ export const STATUT_COLORS: Record<StatutBatiment, string> = {
 
 // Types de sol
 export const TYPE_SOL_LABELS: Record<TypeSol, string> = {
-  ARGILEUX: 'Argileux',
-  SABLEUX: 'Sableux',
-  ROCHEUX: 'Rocheux',
-  LIMONEUX: 'Limoneux',
+  ARGILE: 'Argile',
+  SABLE: 'Sable',
+  ROCHE: 'Roche',
+  LIMON: 'Limon',
+  GRAVIER: 'Gravier',
+  TOURBE: 'Tourbe',
+  REMBLAI: 'Remblai',
+  MIXTE: 'Mixte',
 }
 
 // Types de fondations

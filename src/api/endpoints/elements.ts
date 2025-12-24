@@ -1,5 +1,15 @@
 import { apiClient } from '../client'
-import type { Batiment, Terrain, Fondations, Charpente, Toiture } from '../types/batiment.types'
+import type {
+  Batiment,
+  Terrain,
+  Fondations,
+  Charpente,
+  Toiture,
+  SystemeElectrique,
+  SystemePlomberie,
+  SystemeChauffage,
+  SystemeVentilation,
+} from '../types/batiment.types'
 
 export const elementsApi = {
   /**
@@ -72,6 +82,66 @@ export const elementsApi = {
     const { data } = await apiClient.put<Batiment>(
       `/batiments/${batimentId}/toiture`,
       toiture
+    )
+    return data
+  },
+
+  /**
+   * Définir/Mettre à jour le système électrique d'un bâtiment
+   * PUT /api/batiments/{id}/systeme-electrique
+   */
+  setSystemeElectrique: async (
+    batimentId: string,
+    systeme: Partial<SystemeElectrique>
+  ): Promise<Batiment> => {
+    const { data } = await apiClient.put<Batiment>(
+      `/batiments/${batimentId}/systeme-electrique`,
+      systeme
+    )
+    return data
+  },
+
+  /**
+   * Définir/Mettre à jour le système de plomberie d'un bâtiment
+   * PUT /api/batiments/{id}/systeme-plomberie
+   */
+  setSystemePlomberie: async (
+    batimentId: string,
+    systeme: Partial<SystemePlomberie>
+  ): Promise<Batiment> => {
+    const { data } = await apiClient.put<Batiment>(
+      `/batiments/${batimentId}/systeme-plomberie`,
+      systeme
+    )
+    return data
+  },
+
+  /**
+   * Définir/Mettre à jour le système de chauffage d'un bâtiment
+   * PUT /api/batiments/{id}/systeme-chauffage
+   */
+  setSystemeChauffage: async (
+    batimentId: string,
+    systeme: Partial<SystemeChauffage>
+  ): Promise<Batiment> => {
+    const { data } = await apiClient.put<Batiment>(
+      `/batiments/${batimentId}/systeme-chauffage`,
+      systeme
+    )
+    return data
+  },
+
+  /**
+   * Définir/Mettre à jour le système de ventilation d'un bâtiment
+   * PUT /api/batiments/{id}/systeme-ventilation
+   */
+  setSystemeVentilation: async (
+    batimentId: string,
+    systeme: Partial<SystemeVentilation>
+  ): Promise<Batiment> => {
+    const { data } = await apiClient.put<Batiment>(
+      `/batiments/${batimentId}/systeme-ventilation`,
+      systeme
     )
     return data
   },

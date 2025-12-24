@@ -14,10 +14,14 @@ export enum StatutBatiment {
 }
 
 export enum TypeSol {
-  ARGILEUX = 'ARGILEUX',
-  SABLEUX = 'SABLEUX',
-  ROCHEUX = 'ROCHEUX',
-  LIMONEUX = 'LIMONEUX',
+  ARGILE = 'ARGILE',
+  SABLE = 'SABLE',
+  ROCHE = 'ROCHE',
+  LIMON = 'LIMON',
+  GRAVIER = 'GRAVIER',
+  TOURBE = 'TOURBE',
+  REMBLAI = 'REMBLAI',
+  MIXTE = 'MIXTE',
 }
 
 export enum TypeFondation {
@@ -225,18 +229,25 @@ export interface Niveau {
 
 export interface Charpente {
   type: TypeCharpente
-  formeToit: FormeToit
-  pente: number
-  portee: number
   materiau?: string
+  structureTradition?: any
+  structureFermettes?: any
+  structureMetallique?: any
+  isolation?: any
 }
 
 export interface Toiture {
   type: TypeToiture
-  materiau?: string
-  surface: number
+  forme?: FormeToit
   pente: number
-  couleur?: string
+  surfaceTotale?: number
+  couverture?: any
+  zinguerie?: any
+  ecranSousToiture?: any
+  surfaceEcran?: number
+  isolation?: any
+  ouvertures?: any
+  altitudeFaitage?: number
 }
 
 export interface TableauElectrique {

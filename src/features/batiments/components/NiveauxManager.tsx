@@ -158,8 +158,8 @@ export default function NiveauxManager({ batimentId, niveaux = [] }: NiveauxMana
       <Space size="middle">
         <strong>{niveau.nom}</strong>
         <span>Niveau {niveau.numero}</span>
-        {niveau.altitude !== undefined && <span>• Alt: {niveau.altitude.toFixed(2)} m</span>}
-        {niveau.surface !== undefined && <span>• {niveau.surface.toFixed(2)} m²</span>}
+        {niveau.altitude != null && <span>• Alt: {niveau.altitude.toFixed(2)} m</span>}
+        {niveau.surface != null && <span>• {niveau.surface.toFixed(2)} m²</span>}
         <span>• {niveau.pieces?.length || 0} pièce(s)</span>
         <span>• {niveau.murs?.length || 0} mur(s)</span>
       </Space>
@@ -205,13 +205,13 @@ export default function NiveauxManager({ batimentId, niveaux = [] }: NiveauxMana
           <Descriptions.Item label="Nom">{niveau.nom}</Descriptions.Item>
           <Descriptions.Item label="Numéro">{niveau.numero}</Descriptions.Item>
           <Descriptions.Item label="Altitude (m)">
-            {niveau.altitude !== undefined ? niveau.altitude.toFixed(2) : '-'}
+            {niveau.altitude != null ? niveau.altitude.toFixed(2) : '-'}
           </Descriptions.Item>
           <Descriptions.Item label="Hauteur sous plafond (m)">
-            {niveau.hauteurSousPlafond !== undefined ? niveau.hauteurSousPlafond.toFixed(2) : '-'}
+            {niveau.hauteurSousPlafond != null ? niveau.hauteurSousPlafond.toFixed(2) : '-'}
           </Descriptions.Item>
           <Descriptions.Item label="Surface (m²)">
-            {niveau.surface !== undefined ? niveau.surface.toFixed(2) : '-'}
+            {niveau.surface != null ? niveau.surface.toFixed(2) : '-'}
           </Descriptions.Item>
         </Descriptions>
 

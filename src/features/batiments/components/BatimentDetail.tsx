@@ -8,7 +8,6 @@ import {
   Space,
   Tag,
   Spin,
-  Empty,
   Alert,
 } from 'antd'
 import {
@@ -24,6 +23,12 @@ import { TYPE_BATIMENT_LABELS, STATUT_LABELS, STATUT_COLORS } from '../constants
 import NiveauxManager from './NiveauxManager'
 import TerrainForm from './TerrainForm'
 import FondationsForm from './FondationsForm'
+import CharpenteForm from './CharpenteForm'
+import ToitureForm from './ToitureForm'
+import SystemeElectriqueForm from './SystemeElectriqueForm'
+import SystemePlomberieForm from './SystemePlomberieForm'
+import SystemeChauffageForm from './SystemeChauffageForm'
+import SystemeVentilationForm from './SystemeVentilationForm'
 import ValidationPanel from './ValidationPanel'
 
 const { Title } = Typography
@@ -110,104 +115,34 @@ export default function BatimentDetail() {
     {
       key: 'charpente',
       label: 'Charpente',
-      children: (
-        <Card>
-          {batiment.charpente ? (
-            <Descriptions bordered column={2}>
-              <Descriptions.Item label="Type">{batiment.charpente.type || '-'}</Descriptions.Item>
-              <Descriptions.Item label="Forme du toit">{batiment.charpente.formeToit || '-'}</Descriptions.Item>
-              <Descriptions.Item label="Pente (°)">{batiment.charpente.pente?.toFixed(2) || '-'}</Descriptions.Item>
-              <Descriptions.Item label="Portée (m)">{batiment.charpente.portee?.toFixed(2) || '-'}</Descriptions.Item>
-            </Descriptions>
-          ) : (
-            <Empty description="Aucune information sur la charpente" />
-          )}
-        </Card>
-      ),
+      children: <CharpenteForm batimentId={batiment.id} charpente={batiment.charpente} />,
     },
     {
       key: 'toiture',
       label: 'Toiture',
-      children: (
-        <Card>
-          {batiment.toiture ? (
-            <Descriptions bordered column={2}>
-              <Descriptions.Item label="Type">{batiment.toiture.type || '-'}</Descriptions.Item>
-              <Descriptions.Item label="Surface (m²)">{batiment.toiture.surface?.toFixed(2) || '-'}</Descriptions.Item>
-              <Descriptions.Item label="Pente (°)">{batiment.toiture.pente?.toFixed(2) || '-'}</Descriptions.Item>
-              <Descriptions.Item label="Couleur">{batiment.toiture.couleur || '-'}</Descriptions.Item>
-            </Descriptions>
-          ) : (
-            <Empty description="Aucune information sur la toiture" />
-          )}
-        </Card>
-      ),
+      children: <ToitureForm batimentId={batiment.id} toiture={batiment.toiture} />,
     },
     {
       key: 'systemes',
       label: 'Systèmes',
       children: (
-        <Space vertical size="middle" style={{ width: '100%' }}>
-          <Card title="Système électrique" size="small">
-            {batiment.systemeElectrique ? (
-              <Descriptions bordered column={2} size="small">
-                <Descriptions.Item label="Type">
-                  {batiment.systemeElectrique.tableauElectrique?.type || '-'}
-                </Descriptions.Item>
-                <Descriptions.Item label="Puissance abonnement (kVA)">
-                  {batiment.systemeElectrique.puissanceAbonnement?.toFixed(2) || '-'}
-                </Descriptions.Item>
-              </Descriptions>
-            ) : (
-              <Empty description="Non défini" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            )}
-          </Card>
-
-          <Card title="Système de plomberie" size="small">
-            {batiment.systemePlomberie?.productionEauChaude ? (
-              <Descriptions bordered column={2} size="small">
-                <Descriptions.Item label="Type production eau chaude">
-                  {batiment.systemePlomberie.productionEauChaude.type || '-'}
-                </Descriptions.Item>
-                <Descriptions.Item label="Capacité (L)">
-                  {batiment.systemePlomberie.productionEauChaude.capacite || '-'}
-                </Descriptions.Item>
-              </Descriptions>
-            ) : (
-              <Empty description="Non défini" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            )}
-          </Card>
-
-          <Card title="Système de chauffage" size="small">
-            {batiment.systemeChauffage?.generateur ? (
-              <Descriptions bordered column={2} size="small">
-                <Descriptions.Item label="Type générateur">
-                  {batiment.systemeChauffage.generateur.type || '-'}
-                </Descriptions.Item>
-                <Descriptions.Item label="Puissance (kW)">
-                  {batiment.systemeChauffage.generateur.puissance?.toFixed(2) || '-'}
-                </Descriptions.Item>
-                <Descriptions.Item label="Énergie">
-                  {batiment.systemeChauffage.generateur.energie || '-'}
-                </Descriptions.Item>
-                <Descriptions.Item label="Rendement (%)">
-                  {batiment.systemeChauffage.generateur.rendement?.toFixed(2) || '-'}
-                </Descriptions.Item>
-              </Descriptions>
-            ) : (
-              <Empty description="Non défini" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            )}
-          </Card>
-
-          <Card title="Système de ventilation" size="small">
-            {batiment.systemeVentilation ? (
-              <Descriptions bordered column={1} size="small">
-                <Descriptions.Item label="Type">{batiment.systemeVentilation.type || '-'}</Descriptions.Item>
-              </Descriptions>
-            ) : (
-              <Empty description="Non défini" image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            )}
-          </Card>
+        <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+          <SystemeElectriqueForm
+            batimentId={batiment.id}
+            systeme={batiment.systemeElectrique}
+          />
+          <SystemePlomberieForm
+            batimentId={batiment.id}
+            systeme={batiment.systemePlomberie}
+          />
+          <SystemeChauffageForm
+            batimentId={batiment.id}
+            systeme={batiment.systemeChauffage}
+          />
+          <SystemeVentilationForm
+            batimentId={batiment.id}
+            systeme={batiment.systemeVentilation}
+          />
         </Space>
       ),
     },

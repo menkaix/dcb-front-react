@@ -39,7 +39,9 @@ interface PieceFormData {
   hauteurSousPlafond?: number
 }
 
-export default function PiecesManager({ batimentId, niveauId, pieces = [] }: PiecesManagerProps) {
+export default function PiecesManager({ batimentId, niveauId, pieces }: PiecesManagerProps) {
+  // Gérer le cas où pieces est null ou undefined
+  const piecesList = pieces ?? []
   const queryClient = useQueryClient()
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = Form.useForm<PieceFormData>()
@@ -156,7 +158,7 @@ export default function PiecesManager({ batimentId, niveauId, pieces = [] }: Pie
       title: 'Hauteur S.P. (m)',
       dataIndex: 'hauteurSousPlafond',
       key: 'hauteurSousPlafond',
-      render: (hauteur?: number) => (hauteur !== undefined ? hauteur.toFixed(2) : '-'),
+      render: (hauteur?: number) => (hauteur != null ? hauteur.toFixed(2) : '-'),
       width: 150,
       align: 'right',
     },
@@ -202,17 +204,17 @@ export default function PiecesManager({ batimentId, niveauId, pieces = [] }: Pie
       {contextHolder}
       <Card
         size="small"
-        title={`Pièces (${pieces.length})`}
+        title={`Pièces (${piecesList.length})`}
         extra={
           <Button type="primary" size="small" icon={<PlusOutlined />} onClick={handleAdd}>
             Ajouter
           </Button>
         }
       >
-        {pieces.length > 0 ? (
+        {piecesList.length > 0 ? (
           <Table
             columns={columns}
-            dataSource={pieces}
+            dataSource={piecesList}
             rowKey="id"
             pagination={false}
             size="small"
