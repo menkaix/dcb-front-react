@@ -33,12 +33,12 @@ interface MursManagerProps {
 }
 
 interface MurFormData {
-  nom: string
+  nom?: string
   longueur: number
   hauteur: number
   epaisseur: number
   type: TypeMur
-  materiau: MateriauMur
+  materiau?: MateriauMur
   orientation?: OrientationMur
 }
 
@@ -154,7 +154,7 @@ export default function MursManager({ batimentId, niveauId, murs = [] }: MursMan
       title: 'Matériau',
       dataIndex: 'materiau',
       key: 'materiau',
-      render: (materiau: MateriauMur) => MATERIAU_MUR_LABELS[materiau],
+      render: (materiau?: MateriauMur) => materiau ? MATERIAU_MUR_LABELS[materiau] : '-',
       width: 140,
     },
     {
@@ -249,7 +249,6 @@ export default function MursManager({ batimentId, niveauId, murs = [] }: MursMan
           <Form.Item
             label="Nom"
             name="nom"
-            rules={[{ required: true, message: 'Veuillez saisir le nom du mur' }]}
           >
             <Input placeholder="Ex: Mur façade sud" />
           </Form.Item>
@@ -273,11 +272,11 @@ export default function MursManager({ batimentId, niveauId, murs = [] }: MursMan
             <Form.Item
               label="Matériau"
               name="materiau"
-              rules={[{ required: true, message: 'Veuillez sélectionner le matériau' }]}
               style={{ flex: 1, minWidth: 200 }}
             >
               <Select
-                placeholder="Sélectionner"
+                placeholder="Sélectionner (optionnel)"
+                allowClear
                 options={Object.entries(MATERIAU_MUR_LABELS).map(([value, label]) => ({
                   value,
                   label,

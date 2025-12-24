@@ -139,20 +139,43 @@ export interface Terrain {
 }
 
 export interface Fondations {
-  type: TypeFondation
+  typeFondation: TypeFondation
   profondeur: number
-  materiau?: string
+  semelles?: any
+  longrines?: any
+  radier?: any
+  pieux?: any
+  drainage?: any
+  beton?: any
+  armatures?: any
 }
 
 export interface Mur {
   id: string
-  nom: string
+  nom?: string
   longueur: number
   hauteur: number
   epaisseur: number
   type: TypeMur
-  materiau: MateriauMur
+  materiau?: MateriauMur
   orientation?: OrientationMur
+  surface?: number
+  materiauxPrincipaux?: any
+  chargesPermanentes?: any
+  chargesExploitation?: any
+  isolations?: any
+  porteur?: boolean
+  pointDebut?: any
+  pointFin?: any
+  finitionInterieure?: any
+  finitionExterieure?: any
+  structureParpaings?: any
+  structureBrique?: any
+  structureBeton?: any
+  structureBois?: any
+  chainages?: any
+  linteaux?: any
+  dimensions?: any
 }
 
 export interface Ouverture {

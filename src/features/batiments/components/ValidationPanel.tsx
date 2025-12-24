@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   Drawer,
   Button,
@@ -22,7 +21,7 @@ import { batimentsApi } from '@/api/endpoints/batiments'
 import { queryKeys } from '@/api/query-keys'
 import type { ValidationError } from '@/api/types/batiment.types'
 
-const { Title, Text } = Typography
+const { Text } = Typography
 
 interface ValidationPanelProps {
   batimentId: string

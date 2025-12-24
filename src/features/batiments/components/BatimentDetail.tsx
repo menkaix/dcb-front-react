@@ -8,7 +8,6 @@ import {
   Space,
   Tag,
   Spin,
-  message,
   Empty,
   Alert,
 } from 'antd'
@@ -32,7 +31,6 @@ const { Title } = Typography
 export default function BatimentDetail() {
   const { batimentId } = useParams<{ batimentId: string }>()
   const navigate = useNavigate()
-  const [messageApi, contextHolder] = message.useMessage()
   const [validationOpen, setValidationOpen] = useState(false)
 
   // Récupérer les données du bâtiment
@@ -153,9 +151,11 @@ export default function BatimentDetail() {
           <Card title="Système électrique" size="small">
             {batiment.systemeElectrique ? (
               <Descriptions bordered column={2} size="small">
-                <Descriptions.Item label="Type">{batiment.systemeElectrique.type || '-'}</Descriptions.Item>
-                <Descriptions.Item label="Puissance (kVA)">
-                  {batiment.systemeElectrique.puissance?.toFixed(2) || '-'}
+                <Descriptions.Item label="Type">
+                  {batiment.systemeElectrique.tableauElectrique?.type || '-'}
+                </Descriptions.Item>
+                <Descriptions.Item label="Puissance abonnement (kVA)">
+                  {batiment.systemeElectrique.puissanceAbonnement?.toFixed(2) || '-'}
                 </Descriptions.Item>
               </Descriptions>
             ) : (
@@ -164,13 +164,13 @@ export default function BatimentDetail() {
           </Card>
 
           <Card title="Système de plomberie" size="small">
-            {batiment.systemePlomberie ? (
+            {batiment.systemePlomberie?.productionEauChaude ? (
               <Descriptions bordered column={2} size="small">
-                <Descriptions.Item label="Production eau chaude">
-                  {batiment.systemePlomberie.typeProductionEauChaude || '-'}
+                <Descriptions.Item label="Type production eau chaude">
+                  {batiment.systemePlomberie.productionEauChaude.type || '-'}
                 </Descriptions.Item>
-                <Descriptions.Item label="Capacité ballon (L)">
-                  {batiment.systemePlomberie.capaciteBallon || '-'}
+                <Descriptions.Item label="Capacité (L)">
+                  {batiment.systemePlomberie.productionEauChaude.capacite || '-'}
                 </Descriptions.Item>
               </Descriptions>
             ) : (
@@ -215,7 +215,6 @@ export default function BatimentDetail() {
 
   return (
     <>
-      {contextHolder}
       <div style={{ padding: '24px' }}>
         <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Space>

@@ -3,7 +3,6 @@ import {
   Card,
   Button,
   Form,
-  Input,
   InputNumber,
   Select,
   message,
@@ -15,7 +14,6 @@ import { EditOutlined, SaveOutlined, CloseOutlined, DeleteOutlined } from '@ant-
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { elementsApi } from '@/api/endpoints/elements'
 import { queryKeys } from '@/api/query-keys'
-import { TypeFondation } from '@/api/types/batiment.types'
 import type { Fondations } from '@/api/types/batiment.types'
 import { TYPE_FONDATION_LABELS } from '../constants/labels'
 
@@ -120,13 +118,10 @@ export default function FondationsForm({ batimentId, fondations }: FondationsFor
         >
           <Descriptions bordered column={2}>
             <Descriptions.Item label="Type">
-              {fondations.type ? TYPE_FONDATION_LABELS[fondations.type] : '-'}
+              {fondations.typeFondation ? TYPE_FONDATION_LABELS[fondations.typeFondation] : '-'}
             </Descriptions.Item>
             <Descriptions.Item label="Profondeur (m)">
               {fondations.profondeur?.toFixed(2) || '-'}
-            </Descriptions.Item>
-            <Descriptions.Item label="Matériau" span={2}>
-              {fondations.materiau || '-'}
             </Descriptions.Item>
           </Descriptions>
         </Card>
@@ -157,7 +152,7 @@ export default function FondationsForm({ batimentId, fondations }: FondationsFor
         <Form form={form} layout="vertical">
           <Form.Item
             label="Type de fondations"
-            name="type"
+            name="typeFondation"
             rules={[{ required: true, message: 'Veuillez sélectionner le type de fondations' }]}
           >
             <Select
@@ -185,13 +180,6 @@ export default function FondationsForm({ batimentId, fondations }: FondationsFor
               precision={2}
               addonAfter="m"
             />
-          </Form.Item>
-
-          <Form.Item
-            label="Matériau"
-            name="materiau"
-          >
-            <Input placeholder="Ex: Béton armé C25/30" />
           </Form.Item>
         </Form>
       </Card>

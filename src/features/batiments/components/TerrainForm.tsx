@@ -3,7 +3,6 @@ import {
   Card,
   Button,
   Form,
-  Input,
   InputNumber,
   Select,
   message,
@@ -15,7 +14,6 @@ import { EditOutlined, SaveOutlined, CloseOutlined, DeleteOutlined } from '@ant-
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { elementsApi } from '@/api/endpoints/elements'
 import { queryKeys } from '@/api/query-keys'
-import { TypeSol } from '@/api/types/batiment.types'
 import type { Terrain } from '@/api/types/batiment.types'
 import { TYPE_SOL_LABELS } from '../constants/labels'
 
@@ -125,14 +123,14 @@ export default function TerrainForm({ batimentId, terrain }: TerrainFormProps) {
             <Descriptions.Item label="Type de sol">
               {terrain.typeSol ? TYPE_SOL_LABELS[terrain.typeSol] : '-'}
             </Descriptions.Item>
-            <Descriptions.Item label="Capacité portante (kPa)">
-              {terrain.capacitePortante?.toFixed(2) || '-'}
+            <Descriptions.Item label="Portance sol (kPa)">
+              {terrain.portanceSol?.toFixed(2) || '-'}
             </Descriptions.Item>
-            <Descriptions.Item label="Profondeur nappe (m)">
-              {terrain.profondeurNappe?.toFixed(2) || '-'}
+            <Descriptions.Item label="Profondeur nappe phréatique (m)">
+              {terrain.profondeurNappePhréatique?.toFixed(2) || '-'}
             </Descriptions.Item>
             <Descriptions.Item label="Parcelles cadastrales" span={2}>
-              {terrain.parcellesCadastrales?.join(', ') || '-'}
+              {terrain.numeroParcellesCadastrales || '-'}
             </Descriptions.Item>
             <Descriptions.Item label="Contour" span={2}>
               {terrain.contour ? `${terrain.contour.length} points définis` : '-'}
@@ -197,8 +195,8 @@ export default function TerrainForm({ batimentId, terrain }: TerrainFormProps) {
           </Form.Item>
 
           <Form.Item
-            label="Capacité portante (kPa)"
-            name="capacitePortante"
+            label="Portance du sol (kPa)"
+            name="portanceSol"
           >
             <InputNumber
               style={{ width: '100%' }}
@@ -212,7 +210,7 @@ export default function TerrainForm({ batimentId, terrain }: TerrainFormProps) {
 
           <Form.Item
             label="Profondeur de la nappe phréatique (m)"
-            name="profondeurNappe"
+            name="profondeurNappePhréatique"
           >
             <InputNumber
               style={{ width: '100%' }}
@@ -225,14 +223,13 @@ export default function TerrainForm({ batimentId, terrain }: TerrainFormProps) {
           </Form.Item>
 
           <Form.Item
-            label="Parcelles cadastrales"
-            name="parcellesCadastrales"
-            tooltip="Saisir les références séparées par des virgules"
+            label="Numéro parcelles cadastrales"
+            name="numeroParcellesCadastrales"
+            tooltip="Saisir les références cadastrales"
           >
-            <Select
-              mode="tags"
-              placeholder="Ex: AH 123, AH 124"
+            <InputNumber
               style={{ width: '100%' }}
+              placeholder="Ex: 123456"
             />
           </Form.Item>
         </Form>
