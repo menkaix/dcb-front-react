@@ -26,6 +26,7 @@ import { queryKeys } from '@/api/query-keys'
 import type { Niveau } from '@/api/types/batiment.types'
 import PiecesManager from './PiecesManager'
 import MursManager from './MursManager'
+import CloisonsManager from './CloisonsManager'
 
 interface NiveauxManagerProps {
   batimentId: string
@@ -237,6 +238,17 @@ export default function NiveauxManager({ batimentId, niveaux = [] }: NiveauxMana
                   batimentId={batimentId}
                   niveauId={niveau.id}
                   murs={niveau.murs}
+                />
+              ),
+            },
+            {
+              key: 'cloisons',
+              label: `Cloisons (${niveau.cloisons?.length || 0})`,
+              children: (
+                <CloisonsManager
+                  batimentId={batimentId}
+                  niveauId={niveau.id}
+                  cloisons={niveau.cloisons}
                 />
               ),
             },

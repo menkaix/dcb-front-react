@@ -8,6 +8,7 @@ import {
   Input,
   Select,
   Modal,
+  Drawer,
   message,
   Popconfirm,
   Card
@@ -17,7 +18,8 @@ import {
   DeleteOutlined,
   CopyOutlined,
   EyeOutlined,
-  SearchOutlined
+  SearchOutlined,
+  ThunderboltOutlined,
 } from '@ant-design/icons'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
@@ -28,6 +30,7 @@ import type { Batiment } from '@/api/types/batiment.types'
 import type { TablePaginationConfig } from 'antd/es/table'
 import type { ColumnsType } from 'antd/es/table'
 import { TYPE_BATIMENT_LABELS, STATUT_LABELS, STATUT_COLORS } from '../constants/labels'
+import BatimentWizard from './wizard/BatimentWizard'
 
 const { Title } = Typography
 const { Search } = Input
@@ -44,10 +47,13 @@ export default function BatimentList() {
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(10)
 
-  // Modal de création
+  // Modal de création rapide
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [newBatimentNom, setNewBatimentNom] = useState('')
   const [newBatimentType, setNewBatimentType] = useState<TypeBatiment>(TypeBatiment.MAISON_INDIVIDUELLE)
+
+  // Wizard de configuration
+  const [isWizardOpen, setIsWizardOpen] = useState(false)
 
   // Requête pour récupérer les bâtiments avec filtres et pagination
   const { data, isLoading } = useQuery({
@@ -254,14 +260,23 @@ export default function BatimentList() {
       <div style={{ padding: '24px' }}>
         <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Title level={2} style={{ margin: 0 }}>Liste des Bâtiments</Title>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => setIsCreateModalOpen(true)}
-            size="large"
-          >
-            Nouveau Bâtiment
-          </Button>
+          <Space>
+            <Button
+              icon={<PlusOutlined />}
+              onClick={() => setIsCreateModalOpen(true)}
+              size="large"
+            >
+              Création rapide
+            </Button>
+            <Button
+              type="primary"
+              icon={<ThunderboltOutlined />}
+              onClick={() => setIsWizardOpen(true)}
+              size="large"
+            >
+              Assistant de configuration
+            </Button>
+          </Space>
         </div>
 
         <Card>
@@ -356,6 +371,18 @@ export default function BatimentList() {
             </div>
           </Space>
         </Modal>
+
+        {/* Drawer de l'assistant de configuration */}
+        <Drawer
+          title="Assistant de configuration de bâtiment"
+          width="80%"
+          onClose={() => setIsWizardOpen(false)}
+          open={isWizardOpen}
+          destroyOnClose
+          styles={{ body: { paddingBottom: 80 } }}
+        >
+          <BatimentWizard onClose={() => setIsWizardOpen(false)} />
+        </Drawer>
       </div>
     </>
   )

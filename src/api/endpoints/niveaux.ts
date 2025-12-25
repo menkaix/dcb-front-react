@@ -1,5 +1,5 @@
 import { apiClient } from '../client'
-import type { Batiment, Niveau, Piece, Mur, Ouverture } from '../types/batiment.types'
+import type { Batiment, Niveau, Piece, Mur, Cloison, Ouverture } from '../types/batiment.types'
 
 export const niveauxApi = {
   /**
@@ -144,6 +144,54 @@ export const niveauxApi = {
   ): Promise<Batiment> => {
     const { data } = await apiClient.delete<Batiment>(
       `/batiments/${batimentId}/niveaux/${niveauId}/murs/${murId}`
+    )
+    return data
+  },
+
+  /**
+   * Ajouter une cloison à un niveau
+   * POST /api/batiments/{id}/niveaux/{niveauId}/cloisons
+   */
+  addCloison: async (
+    batimentId: string,
+    niveauId: string,
+    cloison: Partial<Cloison>
+  ): Promise<Batiment> => {
+    const { data } = await apiClient.post<Batiment>(
+      `/batiments/${batimentId}/niveaux/${niveauId}/cloisons`,
+      cloison
+    )
+    return data
+  },
+
+  /**
+   * Mettre à jour une cloison
+   * PUT /api/batiments/{id}/niveaux/{niveauId}/cloisons/{cloisonId}
+   */
+  updateCloison: async (
+    batimentId: string,
+    niveauId: string,
+    cloisonId: string,
+    cloison: Partial<Cloison>
+  ): Promise<Batiment> => {
+    const { data } = await apiClient.put<Batiment>(
+      `/batiments/${batimentId}/niveaux/${niveauId}/cloisons/${cloisonId}`,
+      cloison
+    )
+    return data
+  },
+
+  /**
+   * Supprimer une cloison
+   * DELETE /api/batiments/{id}/niveaux/{niveauId}/cloisons/{cloisonId}
+   */
+  deleteCloison: async (
+    batimentId: string,
+    niveauId: string,
+    cloisonId: string
+  ): Promise<Batiment> => {
+    const { data } = await apiClient.delete<Batiment>(
+      `/batiments/${batimentId}/niveaux/${niveauId}/cloisons/${cloisonId}`
     )
     return data
   },

@@ -8,6 +8,7 @@ import {
   OrientationMur,
   TypePiece,
   TypePlancher,
+  TypeCloison,
   TypeCharpente,
   FormeToit,
   TypeToiture,
@@ -102,6 +103,14 @@ export const TYPE_PLANCHER_LABELS: Record<TypePlancher, string> = {
   DALLE_PLEINE_BETON: 'Dalle pleine béton',
   PLANCHER_BOIS: 'Plancher bois',
   CLT: 'CLT',
+}
+
+// Types de cloisons
+export const TYPE_CLOISON_LABELS: Record<TypeCloison, string> = {
+  PLAQUES_PLATRE_BA13: 'Plaques de plâtre BA13',
+  PLAQUES_PLATRE_BA10: 'Plaques de plâtre BA10',
+  CARREAUX_PLATRE: 'Carreaux de plâtre',
+  BRIQUE_PLATRIERE: 'Brique plâtrière',
 }
 
 // Types de charpente

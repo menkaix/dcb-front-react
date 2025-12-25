@@ -35,7 +35,7 @@ interface PiecesManagerProps {
 interface PieceFormData {
   nom: string
   type: TypePiece
-  surface: number
+  surface?: number
   hauteurSousPlafond?: number
 }
 
@@ -150,7 +150,7 @@ export default function PiecesManager({ batimentId, niveauId, pieces }: PiecesMa
       title: 'Surface (m²)',
       dataIndex: 'surface',
       key: 'surface',
-      render: (surface: number) => surface.toFixed(2),
+      render: (surface?: number) => (surface != null ? surface.toFixed(2) : '-'),
       width: 120,
       align: 'right',
     },
@@ -161,6 +161,18 @@ export default function PiecesManager({ batimentId, niveauId, pieces }: PiecesMa
       render: (hauteur?: number) => (hauteur != null ? hauteur.toFixed(2) : '-'),
       width: 150,
       align: 'right',
+    },
+    {
+      title: 'Contour',
+      key: 'contour',
+      render: (_, record) => {
+        if (record.contour && record.contour.length > 0) {
+          return `${record.contour.length} points`
+        }
+        return '-'
+      },
+      width: 100,
+      align: 'center',
     },
     {
       title: 'Actions',
@@ -261,10 +273,8 @@ export default function PiecesManager({ batimentId, niveauId, pieces }: PiecesMa
           <Form.Item
             label="Surface (m²)"
             name="surface"
-            rules={[
-              { required: true, message: 'Veuillez saisir la surface' },
-              { type: 'number', min: 0, message: 'La surface doit être positive' },
-            ]}
+            rules={[{ type: 'number', min: 0, message: 'La surface doit être positive' }]}
+            tooltip="Optionnel - peut être calculée automatiquement à partir du contour"
           >
             <InputNumber
               style={{ width: '100%' }}

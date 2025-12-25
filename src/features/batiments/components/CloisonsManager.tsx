@@ -20,99 +20,96 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { niveauxApi } from '@/api/endpoints/niveaux'
 import { queryKeys } from '@/api/query-keys'
-import { TypeMur, OrientationMur } from '@/api/types/batiment.types'
-import type { Mur } from '@/api/types/batiment.types'
+import { TypeCloison } from '@/api/types/batiment.types'
+import type { Cloison } from '@/api/types/batiment.types'
 import type { ColumnsType } from 'antd/es/table'
-import { TYPE_MUR_LABELS, ORIENTATION_MUR_LABELS } from '../constants/labels'
+import { TYPE_CLOISON_LABELS } from '../constants/labels'
 
-interface MursManagerProps {
+interface CloisonsManagerProps {
   batimentId: string
   niveauId: string
-  murs?: Mur[]
+  cloisons?: Cloison[]
 }
 
-interface MurFormData {
+interface CloisonFormData {
   longueur: number
   hauteur: number
   epaisseur: number
-  type: TypeMur
-  orientation?: OrientationMur
+  type: TypeCloison
 }
 
-export default function MursManager({ batimentId, niveauId, murs }: MursManagerProps) {
-  // Gérer le cas où murs est null ou undefined
-  const mursList = murs ?? []
+export default function CloisonsManager({ batimentId, niveauId, cloisons }: CloisonsManagerProps) {
+  const cloisonsList = cloisons ?? []
   const queryClient = useQueryClient()
   const [messageApi, contextHolder] = message.useMessage()
-  const [form] = Form.useForm<MurFormData>()
+  const [form] = Form.useForm<CloisonFormData>()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingMur, setEditingMur] = useState<Mur | null>(null)
+  const [editingCloison, setEditingCloison] = useState<Cloison | null>(null)
 
-  // Mutation pour ajouter un mur
+  // Mutation pour ajouter une cloison
   const addMutation = useMutation({
-    mutationFn: (mur: Partial<Mur>) => niveauxApi.addMur(batimentId, niveauId, mur),
+    mutationFn: (cloison: Partial<Cloison>) => niveauxApi.addCloison(batimentId, niveauId, cloison),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.batiments.detail(batimentId) })
-      messageApi.success('Mur ajouté avec succès')
+      messageApi.success('Cloison ajoutée avec succès')
       handleCloseModal()
     },
     onError: () => {
-      messageApi.error("Erreur lors de l'ajout du mur")
+      messageApi.error("Erreur lors de l'ajout de la cloison")
     },
   })
 
-  // Mutation pour modifier un mur
+  // Mutation pour modifier une cloison
   const updateMutation = useMutation({
-    mutationFn: ({ murId, mur }: { murId: string; mur: Partial<Mur> }) =>
-      niveauxApi.updateMur(batimentId, niveauId, murId, mur),
+    mutationFn: ({ cloisonId, cloison }: { cloisonId: string; cloison: Partial<Cloison> }) =>
+      niveauxApi.updateCloison(batimentId, niveauId, cloisonId, cloison),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.batiments.detail(batimentId) })
-      messageApi.success('Mur modifié avec succès')
+      messageApi.success('Cloison modifiée avec succès')
       handleCloseModal()
     },
     onError: () => {
-      messageApi.error('Erreur lors de la modification du mur')
+      messageApi.error('Erreur lors de la modification de la cloison')
     },
   })
 
-  // Mutation pour supprimer un mur
+  // Mutation pour supprimer une cloison
   const deleteMutation = useMutation({
-    mutationFn: (murId: string) => niveauxApi.deleteMur(batimentId, niveauId, murId),
+    mutationFn: (cloisonId: string) => niveauxApi.deleteCloison(batimentId, niveauId, cloisonId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.batiments.detail(batimentId) })
-      messageApi.success('Mur supprimé avec succès')
+      messageApi.success('Cloison supprimée avec succès')
     },
     onError: () => {
-      messageApi.error('Erreur lors de la suppression du mur')
+      messageApi.error('Erreur lors de la suppression de la cloison')
     },
   })
 
   const handleAdd = () => {
-    setEditingMur(null)
+    setEditingCloison(null)
     form.resetFields()
     setIsModalOpen(true)
   }
 
-  const handleEdit = (mur: Mur) => {
-    setEditingMur(mur)
+  const handleEdit = (cloison: Cloison) => {
+    setEditingCloison(cloison)
     form.setFieldsValue({
-      longueur: mur.longueur,
-      hauteur: mur.hauteur,
-      epaisseur: mur.epaisseur,
-      type: mur.type,
-      orientation: mur.orientation,
+      longueur: cloison.longueur,
+      hauteur: cloison.hauteur,
+      epaisseur: cloison.epaisseur,
+      type: cloison.type,
     })
     setIsModalOpen(true)
   }
 
-  const handleDelete = (murId: string) => {
-    deleteMutation.mutate(murId)
+  const handleDelete = (cloisonId: string) => {
+    deleteMutation.mutate(cloisonId)
   }
 
   const handleCloseModal = () => {
     setIsModalOpen(false)
-    setEditingMur(null)
+    setEditingCloison(null)
     form.resetFields()
   }
 
@@ -120,10 +117,10 @@ export default function MursManager({ batimentId, niveauId, murs }: MursManagerP
     try {
       const values = await form.validateFields()
 
-      if (editingMur) {
+      if (editingCloison) {
         updateMutation.mutate({
-          murId: editingMur.id,
-          mur: values,
+          cloisonId: editingCloison.id,
+          cloison: values,
         })
       } else {
         addMutation.mutate(values)
@@ -133,21 +130,21 @@ export default function MursManager({ batimentId, niveauId, murs }: MursManagerP
     }
   }
 
-  const columns: ColumnsType<Mur> = [
+  const columns: ColumnsType<Cloison> = [
     {
       title: 'Type',
       dataIndex: 'type',
       key: 'type',
-      render: (type: TypeMur) => TYPE_MUR_LABELS[type],
-      width: 120,
+      render: (type: TypeCloison) => TYPE_CLOISON_LABELS[type],
+      width: 180,
     },
     {
       title: 'Dimensions (L×H×E)',
       key: 'dimensions',
       render: (_, record) => {
-        const longueur = record.dimensions?.longueur ?? record.longueur ?? 0
-        const hauteur = record.dimensions?.hauteur ?? record.hauteur
-        const epaisseur = record.dimensions?.largeur ?? record.epaisseur
+        const longueur = record.longueur ?? 0
+        const hauteur = record.hauteur
+        const epaisseur = record.epaisseur
         return `${longueur.toFixed(2)} × ${hauteur.toFixed(2)} × ${epaisseur.toFixed(2)} m`
       },
       width: 180,
@@ -156,26 +153,9 @@ export default function MursManager({ batimentId, niveauId, murs }: MursManagerP
       title: 'Surface',
       key: 'surface',
       render: (_, record) => {
-        const surface = record.dimensions?.surface ?? record.surface
+        const surface = record.surface
         return surface != null ? `${surface.toFixed(2)} m²` : '-'
       },
-      width: 100,
-    },
-    {
-      title: 'Volume',
-      key: 'volume',
-      render: (_, record) => {
-        const volume = record.dimensions?.volume
-        return volume != null ? `${volume.toFixed(2)} m³` : '-'
-      },
-      width: 100,
-    },
-    {
-      title: 'Orientation',
-      dataIndex: 'orientation',
-      key: 'orientation',
-      render: (orientation?: OrientationMur) =>
-        orientation ? ORIENTATION_MUR_LABELS[orientation] : '-',
       width: 100,
     },
     {
@@ -194,8 +174,8 @@ export default function MursManager({ batimentId, niveauId, murs }: MursManagerP
             Modifier
           </Button>
           <Popconfirm
-            title="Supprimer le mur"
-            description="Êtes-vous sûr de vouloir supprimer ce mur ?"
+            title="Supprimer la cloison"
+            description="Êtes-vous sûr de vouloir supprimer cette cloison ?"
             onConfirm={() => handleDelete(record.id)}
             okText="Oui"
             cancelText="Non"
@@ -220,34 +200,34 @@ export default function MursManager({ batimentId, niveauId, murs }: MursManagerP
       {contextHolder}
       <Card
         size="small"
-        title={`Murs (${mursList.length})`}
+        title={`Cloisons (${cloisonsList.length})`}
         extra={
           <Button type="primary" size="small" icon={<PlusOutlined />} onClick={handleAdd}>
             Ajouter
           </Button>
         }
       >
-        {mursList.length > 0 ? (
+        {cloisonsList.length > 0 ? (
           <Table
             columns={columns}
-            dataSource={mursList}
+            dataSource={cloisonsList}
             rowKey="id"
             pagination={false}
             size="small"
-            scroll={{ x: 900 }}
+            scroll={{ x: 800 }}
           />
         ) : (
-          <Empty description="Aucun mur défini" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          <Empty description="Aucune cloison définie" image={Empty.PRESENTED_IMAGE_SIMPLE} />
         )}
       </Card>
 
       <Modal
-        title={editingMur ? 'Modifier le mur' : 'Ajouter un mur'}
+        title={editingCloison ? 'Modifier la cloison' : 'Ajouter une cloison'}
         open={isModalOpen}
         onOk={handleSubmit}
         onCancel={handleCloseModal}
         confirmLoading={addMutation.isPending || updateMutation.isPending}
-        okText={editingMur ? 'Modifier' : 'Ajouter'}
+        okText={editingCloison ? 'Modifier' : 'Ajouter'}
         cancelText="Annuler"
         width={700}
       >
@@ -259,7 +239,7 @@ export default function MursManager({ batimentId, niveauId, murs }: MursManagerP
           >
             <Select
               placeholder="Sélectionner"
-              options={Object.entries(TYPE_MUR_LABELS).map(([value, label]) => ({
+              options={Object.entries(TYPE_CLOISON_LABELS).map(([value, label]) => ({
                 value,
                 label,
               }))}
@@ -324,17 +304,6 @@ export default function MursManager({ batimentId, niveauId, murs }: MursManagerP
               />
             </Form.Item>
           </Space>
-
-          <Form.Item label="Orientation" name="orientation">
-            <Select
-              placeholder="Sélectionner (optionnel)"
-              allowClear
-              options={Object.entries(ORIENTATION_MUR_LABELS).map(([value, label]) => ({
-                value,
-                label,
-              }))}
-            />
-          </Form.Item>
         </Form>
       </Modal>
     </>

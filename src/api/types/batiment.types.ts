@@ -69,6 +69,13 @@ export enum TypePlancher {
   CLT = 'CLT',
 }
 
+export enum TypeCloison {
+  PLAQUES_PLATRE_BA13 = 'PLAQUES_PLATRE_BA13',
+  PLAQUES_PLATRE_BA10 = 'PLAQUES_PLATRE_BA10',
+  CARREAUX_PLATRE = 'CARREAUX_PLATRE',
+  BRIQUE_PLATRIERE = 'BRIQUE_PLATRIERE',
+}
+
 export enum TypeCharpente {
   TRADITIONNELLE = 'TRADITIONNELLE',
   FERMETTES_INDUSTRIELLES = 'FERMETTES_INDUSTRIELLES',
@@ -154,10 +161,18 @@ export interface Fondations {
   armatures?: any
 }
 
+export interface Dimensions3D {
+  longueur: number
+  largeur: number
+  hauteur: number
+  surface: number
+  volume: number
+}
+
 export interface Mur {
   id: string
   nom?: string
-  longueur: number
+  longueur?: number
   hauteur: number
   epaisseur: number
   type: TypeMur
@@ -169,8 +184,8 @@ export interface Mur {
   chargesExploitation?: any
   isolations?: any
   porteur?: boolean
-  pointDebut?: any
-  pointFin?: any
+  pointDebut?: Point3D
+  pointFin?: Point3D
   finitionInterieure?: any
   finitionExterieure?: any
   structureParpaings?: any
@@ -179,7 +194,7 @@ export interface Mur {
   structureBois?: any
   chainages?: any
   linteaux?: any
-  dimensions?: any
+  dimensions?: Dimensions3D
 }
 
 export interface Ouverture {
@@ -195,8 +210,15 @@ export interface Piece {
   id: string
   nom: string
   type: TypePiece
-  surface: number
+  surface?: number
   hauteurSousPlafond?: number
+  contour?: Point3D[]
+  volume?: number
+  revetementSol?: any
+  revetementsMurs?: any
+  plafond?: any
+  idsOuvertures?: string[]
+  equipements?: any
 }
 
 export interface Plancher {
@@ -213,6 +235,25 @@ export interface Tremie {
   surface: number
 }
 
+export interface Cloison {
+  id: string
+  hauteur: number
+  epaisseur: number
+  type: TypeCloison
+  porteur?: boolean
+  pointDebut?: Point3D
+  pointFin?: Point3D
+  longueur?: number
+  surface?: number
+  materiauxPrincipaux?: any
+  chargesPermanentes?: any
+  chargesExploitation?: any
+  isolations?: any
+  finitionInterieure?: any
+  finitionExterieure?: any
+  isolationPhonique?: any
+}
+
 export interface Niveau {
   id: string
   nom: string
@@ -223,8 +264,14 @@ export interface Niveau {
   surface?: number
   pieces?: Piece[]
   murs?: Mur[]
+  cloisons?: Cloison[]
   plancher?: Plancher
   tremies?: Tremie[]
+  poteaux?: any
+  voiles?: any
+  plancherBas?: any
+  plancherHaut?: any
+  escaliers?: any
 }
 
 export interface Charpente {
